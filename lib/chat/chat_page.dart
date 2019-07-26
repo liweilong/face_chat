@@ -12,6 +12,11 @@ class ChatPage extends StatefulWidget {
 class ChatPageState extends State<ChatPage> {
 
   TextEditingController _editController = new TextEditingController();
+  ScrollController _scrollController = ScrollController(
+
+  );
+//  var str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var str = "ABC";
 
   @override
   Widget build(BuildContext context) {
@@ -19,45 +24,102 @@ class ChatPageState extends State<ChatPage> {
       appBar: AppBar(
         title: Text("夏天的风"),
         centerTitle: true,
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
-        ),
+        leading: Builder(builder: (context) => IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        )),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.more_horiz, color: Colors.black,),
+            icon: Icon(Icons.more_horiz, color: Colors.white,),
             onPressed: () => print("more"),
           )
         ],
       ),
-      body: ListBody(
+      body: Column(
         children: <Widget>[
-          DecoratedBox(
+          Expanded(
+            flex: 1,
             child: Container(
-              child: Text("Hello"),
-              height: 30,
-              width: 100,
+              child: Column(
+                children: <Widget>[
+                  Flexible(
+                    child: ListView(
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      controller: _scrollController,
+                      itemExtent: 40,
+                      reverse: true,
+                      shrinkWrap: true,
+                      children: str.split("").map((c) =>
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 3, horizontal: 0),
+                            child: DecoratedBox(
+                              child: Center(child: Text(c),),
+                              decoration: BoxDecoration(
+                                color: Colors.lightGreen,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                          )
+                      ).toList()
+                    ),
+                  ),
+                ],
+              ),
             ),
-            decoration: BoxDecoration(
-              color: Colors.lightGreen,
-              borderRadius: BorderRadius.circular(5),
+          ),
+          Container(
+            color: Colors.grey[200],
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.keyboard_voice, size: 30,),
+                  onPressed: () => print("voice"),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                    constraints: BoxConstraints(
+                      maxHeight: 150,
+                      minHeight: 30,
+                    ),
+                    child: TextField(
+                      maxLength: 100,
+                      maxLines: null,
+                      maxLengthEnforced: true,
+                      keyboardType: TextInputType.multiline,
+                      textInputAction: TextInputAction.send,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.all(8),
+                        counterText: "",
+                        isDense: true,
+                      ),
+                      onTap: () => {
+
+                      },
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.insert_emoticon, size: 30,),
+                  onPressed: () => print("add"),
+                ),
+                IconButton(
+                  icon: Icon(Icons.add_circle_outline, size: 30,),
+                  onPressed: () {
+                    print(_scrollController.offset);
+                    _scrollController.animateTo(0,
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.ease,
+                    );
+                  },
+                ),
+              ],
             ),
           )
         ],
-      ),
-      bottomNavigationBar: Container(
-        height: 30,
-        child: Row(
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.keyboard_voice),
-              onPressed: () => {},
-            ),
-            TextField(
-              controller: _editController,
-            ),
-          ],
-        ),
       ),
     );
   }
