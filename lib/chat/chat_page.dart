@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'msg_record.dart';
+
 class ChatPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -11,7 +13,6 @@ class ChatPage extends StatefulWidget {
 
 class ChatPageState extends State<ChatPage> {
 
-  TextEditingController _editController = new TextEditingController();
   ScrollController _scrollController = ScrollController(
 
   );
@@ -44,21 +45,14 @@ class ChatPageState extends State<ChatPage> {
                 children: <Widget>[
                   Flexible(
                     child: ListView(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                       controller: _scrollController,
-                      itemExtent: 40,
                       reverse: true,
                       shrinkWrap: true,
                       children: str.split("").map((c) =>
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 3, horizontal: 0),
-                            child: DecoratedBox(
-                              child: Center(child: Text(c),),
-                              decoration: BoxDecoration(
-                                color: Colors.lightGreen,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
+                            child: ChatMsgWidget(c),
                           )
                       ).toList()
                     ),
@@ -96,7 +90,7 @@ class ChatPageState extends State<ChatPage> {
                         counterText: "",
                         isDense: true,
                       ),
-                      onTap: () => {
+                      onSubmitted: (str) {
 
                       },
                     ),
